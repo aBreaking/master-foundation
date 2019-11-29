@@ -20,9 +20,9 @@ public class ScriptDemo {
      * @throws ScriptException
      */
     public static void testJsExpress() throws ScriptException {
-        String value = "1.3";
+        String value = "'1.3'";
         String operator = ">=";
-        String threshold = "1.2";
+        String threshold = "'2.5'";
         String express = value+operator+threshold;
         ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
         ScriptEngine javascript = scriptEngineManager.getEngineByName("javascript");
