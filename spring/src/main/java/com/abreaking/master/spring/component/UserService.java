@@ -1,4 +1,4 @@
-package com.abreaking.master.spring;
+package com.abreaking.master.spring.component;
 
 /**
  * @{USER}

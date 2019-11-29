@@ -7,7 +7,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 import javax.annotation.Resource;
+
 
 /**
  * 有多个resource 这时会怎么样？
@@ -16,7 +18,7 @@ import javax.annotation.Resource;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath*:*.xml"})
-public class InjectWithManyResource{
+public class InjectWithManyResourceTest{
 
     /**
      * 存在多个实现类的compoenent时：
@@ -38,13 +40,4 @@ public class InjectWithManyResource{
         userServiceSecond.print();
     }
 
-    @Resource
-    RecycleDIFirst recycleDIFirst;
-    /**
-     * 循环的依赖注入怎么看？
-     */
-    @Test
-    public void testRecycleDI(){
-        recycleDIFirst.print();
-    }
 }
