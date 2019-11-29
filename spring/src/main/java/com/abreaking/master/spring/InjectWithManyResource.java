@@ -15,7 +15,7 @@ import javax.annotation.Resource;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath*:*.xml"})
-public class InjectWithManyResouce{
+public class InjectWithManyResource{
 
     /**
      * 存在多个实现类的compoenent时：
