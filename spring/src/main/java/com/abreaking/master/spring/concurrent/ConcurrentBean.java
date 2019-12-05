@@ -2,6 +2,7 @@ package com.abreaking.master.spring.concurrent;
 
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,13 +13,17 @@ import java.util.Map;
 @Component
 public class ConcurrentBean {
 
+    @Resource
+    ComponentClient componentClient;
+
     /**
      * 要做的事情
      */
     public void pull(){
         String key = "key";
         String value = Thread.currentThread().getName();
-        Client client = new Client(value);
+        //Client client = new Client(value);
+        Client client = componentClient;
         Map<String, Client> map = Collections.singletonMap(key, client);
         try{
             System.out.println(value+"->pull start");

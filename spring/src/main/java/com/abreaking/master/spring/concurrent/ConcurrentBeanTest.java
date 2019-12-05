@@ -22,6 +22,11 @@ public class ConcurrentBeanTest {
     ConcurrentBean concurrentBean;
 
     @Test
+    public void test02(){
+
+    }
+
+    @Test
     public void test01() throws InterruptedException {
         int size = 8;
         ExecutorService pool = Executors.newFixedThreadPool(size);
