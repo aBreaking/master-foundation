@@ -10,20 +10,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class UserService implements Runnable{
-
-    @Value("zhangsan")
-    String name;
-
     @Override
     public void run() {
         System.out.println("UserService is running");
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }

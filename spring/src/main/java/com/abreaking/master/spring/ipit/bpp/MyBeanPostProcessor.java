@@ -1,5 +1,6 @@
 package com.abreaking.master.spring.ipit.bpp;
 
+import com.abreaking.master.spring.ipit.bpp.component.OtherService;
 import com.abreaking.master.spring.ipit.bpp.component.UserService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -20,23 +21,24 @@ public class MyBeanPostProcessor implements BeanPostProcessor  {
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+        System.out.println(beanName+" begin init");
         if (bean instanceof Runnable){
             ((Runnable)bean).run();
         }
         if (bean instanceof Serializable){
-            System.out.println(beanName + " is Serializable");
+            System.out.println(beanName + " can be serialized");
         }
         return bean;
     }
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        System.out.println(beanName+"->postProcessAfterInitialization");
+        System.out.println(beanName+" init complete");
         return bean;
     }
 
     public static void main(String args[]){
         ApplicationContext context = new AnnotationConfigApplicationContext("com.abreaking.master.spring.ipit.bpp");
-        System.out.println("bean初始化前后就是执行定义的BeanPostProcessor的方法");
+        System.out.println("容器启动后，bean初始化后就会执行定义的BeanPostProcessor的方法");
     }
 }

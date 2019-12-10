@@ -13,14 +13,4 @@ import java.io.Serializable;
 @Component
 public class OtherService implements Serializable {
 
-    @Value("other")
-    private String name;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
