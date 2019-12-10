@@ -17,7 +17,7 @@ public class MyBeanWarpper {
     /**
      * 类型转换错误
      */
-    @Value("ac")
+    @Value("18")
     int age;
 
     @Override
