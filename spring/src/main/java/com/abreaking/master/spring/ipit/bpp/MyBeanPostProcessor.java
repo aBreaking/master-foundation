@@ -7,6 +7,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.PriorityOrdered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,7 @@ import java.io.Serializable;
  * @date 2019/12/5
  */
 @Configuration
-public class MyBeanPostProcessor implements BeanPostProcessor  {
+public class MyBeanPostProcessor implements BeanPostProcessor {
 
     //bean实例化之前进行定义的逻辑处理:针对不同接口进行不同处理
     @Override

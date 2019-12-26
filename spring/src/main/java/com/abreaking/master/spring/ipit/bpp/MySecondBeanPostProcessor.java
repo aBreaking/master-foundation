@@ -6,8 +6,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.PriorityOrdered;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 
 /**
@@ -16,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @date 2019/12/5
  */
 @Configuration
-public class MySecondBeanPostProcessor implements BeanPostProcessor {
+public class MySecondBeanPostProcessor implements BeanPostProcessor,PriorityOrdered {
 
     //bean实例化之前进行定义的逻辑处理:针对不同接口进行不同处理
     @Override
@@ -31,12 +29,7 @@ public class MySecondBeanPostProcessor implements BeanPostProcessor {
         return bean;
     }
 
-    public static void main(String args[]){
-        ApplicationContext context = new AnnotationConfigApplicationContext("com.abreaking.master.spring.ipit.bpp");
-        System.out.println("容器启动后，bean初始化后就会执行定义的BeanPostProcessor的方法");
-    }
-
-
+    //这里设置一个排序值，让该BeanPostProcessor最先被执行
     public int getOrder() {
         return Integer.MAX_VALUE;
     }
