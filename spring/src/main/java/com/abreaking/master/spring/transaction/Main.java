@@ -29,6 +29,6 @@ public class Main {
     TxInvalidMaster txInvalidMaster;
     @Test
     public void testTxInvalidMaster() throws IOException {
-        txInvalidMaster.rollbackForA();
+        txInvalidMaster.readOnlyA();
     }
 }

@@ -46,9 +46,24 @@ public class TxInvalidMaster {
         int s =3/0;
     }
 
-    @Transactional(rollbackFor = SQLException.class)
+    @Transactional(rollbackFor = IOException.class)
     public void rollbackForA() throws IOException {
-        jdbcTemplate.update("insert into user(id,name) value (2,'lisi')");
+        jdbcTemplate.update("insert into user(id,name) value (2,'abc')");
         throw new IOException("123");
+    }
+
+    @Transactional(timeout = 2)
+    public void timeoutA(){
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        jdbcTemplate.update("insert into user(id,name) value (2,'123')");
+    }
+
+    @Transactional(readOnly=true)
+    public void readOnlyA(){
+        jdbcTemplate.update("insert into user(id,name) value (2,'123')");
     }
 }
