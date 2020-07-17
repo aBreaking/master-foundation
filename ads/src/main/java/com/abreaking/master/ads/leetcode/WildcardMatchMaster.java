@@ -55,53 +55,89 @@ package com.abreaking.master.ads.leetcode;
 public class WildcardMatchMaster {
 
     public static void main(String args[]){
-        WildcardMatchMaster master = new WildcardMatchMaster();
-        String s = "aa";
-        String p = "ab?";
-        System.out.println(master.isMatch(s,p));
+        //assertMatch("1a","?*",true);
+        //assertMatch("1a","1*",true);
+        assertMatch("abcdefg","ab?de*g",true);
     }
 
+    private static void assertMatch(String s,String p,boolean flag){
+        WildcardMatchMaster master = new WildcardMatchMaster();
+        boolean match = master.isMatch(s, p);
+        if (match ^ flag){
+            System.out.println(s+","+p+"\terror->should be "+flag+",but "+match);
+        }
+    }
+
+    /**
+     * 从左至右裁剪字符串法。
+     * 失败！
+     * 原因：*的匹配考虑不全面，全量匹配还是部分匹配考虑不周到
+     * String s = "a";
+     * String p = "?*";
+     * @param s
+     * @param p
+     * @return
+     */
     private boolean isMatch(String s, String p){
         char[] pc = p.toCharArray();
         // 从左到右匹配s，匹配成功就将s成功 的部分删除掉
-        int ls = 0; //记录匹配到哪里了
+        int ls = 0; //记录p匹配到哪里了
         for (int pi = 0; pi < pc.length; pi++) {
-            if(s.length()==0){
+            //先比较p 剩余的部分与s是不是一样的，一样的就没必要继续了
+            if (s.equals(p.substring(ls))){
+                return true;
+            }
+
+            char pCur = pc[pi];
+            if(s.length()==0 && pCur == '*'){
+                ls = pi+1;
+                continue;
+            }
+            if (pCur != '?' && pCur != '*'){
+                continue;
+            }
+            //有匹配符 * 或者 ？ ,那么截取p中匹配符前面的字符串，看下s还有没有
+            String psub = p.substring(ls, pi);
+            //此时psub 必定是 s的开头
+            int indexOfs = s.indexOf(psub);
+            if (indexOfs!=0){
                 return false;
             }
-            //找出p 应该匹配出来的部分
-            if (pc[pi] == '?'){
-                String psub = p.substring(ls, pi);
-                //?前面的字符串部分匹配
-                s = tryCut(s,psub,1);
-                if (s.equals("-1")){
-                    return false;
-                }
-                ls = pi+1;
-            }else if(pc[pi] == '*'){
-                String psub = p.substring(ls, pi);
-                s = tryCut(s,psub,0);
-                if (s.equals("-1")){
-                    return false;
-                }
-                //找到*的下一个字母
-                if(pi < pc.length-1){
-                    int lastIndexOfs = s.lastIndexOf(pc[++pi])+1;
-                    if (lastIndexOfs==0){
-                        return false;
+
+            //如果是? ，往后面1位
+            int offset ;
+            if (pCur == '?'){
+                offset = 1;
+            }else{
+                //* 的处理
+                offset = 0; //默认0,即*是结尾了
+                //找到 * 的下一个字符
+                char _pc;
+                while(pi<pc.length){
+                    if (pc[pi] != '*'){
+                        _pc = pc[pi];
+                        break;
                     }
-                    s = s.substring(0,lastIndexOfs);
+                    pi++;
                 }
+
             }
+            int sIndex2cut = psub.length()+offset;
+            if (psub.length()>=s.length()){
+                //需要cut的部分比s还长，那么匹配失败
+                return false;
+            }
+            //现在将s给剪切,p只是记录到哪里了
+            s = s.substring(sIndex2cut); //s的剩余部分
+            ls = pi+1; //记录p剪切到哪里了
         }
         return s.length()==0;
     }
-
     private static String tryCut(String s ,String sub,int offset){
         int indexOfs = s.indexOf(sub);
-        if (indexOfs!=-1){
-            int s2sub = indexOfs+sub.length()+offset;
-            return s.substring(s2sub>=s.length()?s.length():s2sub);
+        int tocut = sub.length()+offset;
+        if (indexOfs==0 && tocut<=s.length()){
+            return s.substring(tocut);
         }
         return "-1";
     }
