@@ -57,16 +57,46 @@ public class WildcardMatchMaster {
     public static void main(String args[]){
         //assertMatch("1a","?*",true);
         //assertMatch("1a","1*",true);
-        assertMatch("abcdefg","ab?de*g",true);
+        assertMatch("efg","e*g",true);
+        assertMatch("acdcb","a*c?b",false);
+        assertMatch("adceb","a*b",true);
+        assertMatch("","*",true);
+        assertMatch("aa","*?",true);
+        assertMatch("","a",false);
+        assertMatch("a","?*",true);
+        assertMatch("a","*?*?",false);
+        assertMatch("a","*?*",true);
+        assertMatch("zacabz","*a?b*",false);
+        assertMatch("b","*?*?*",false);
+        assertMatch("","?",false);
+        assertMatch("cd","c*?",true);
+        assertMatch("d","*d*d",false);
+        assertMatch("ab","*ab",true);
+        assertMatch("mississippi","m*si*",true);
     }
 
-    private static void assertMatch(String s,String p,boolean flag){
-        WildcardMatchMaster master = new WildcardMatchMaster();
-        boolean match = master.isMatch(s, p);
-        if (match ^ flag){
-            System.out.println(s+","+p+"\terror->should be "+flag+",but "+match);
-        }
-    }
+     public boolean isMatch3(String s,String p){
+         boolean[][] dp = new boolean[s.length() + 1][p.length() + 1];
+         dp[0][0] = true;
+         for (int j = 1; j < p.length() + 1; j++) {
+             if (p.charAt(j - 1) == '*') {
+                 dp[0][j] = dp[0][j - 1];
+             }
+         }
+         for (int i = 1; i < s.length() + 1; i++) {
+             for (int j = 1; j < p.length() + 1; j++) {
+                 if (s.charAt(i - 1) == p.charAt(j - 1) || p.charAt(j - 1) == '?') {
+                     dp[i][j] = dp[i - 1][j - 1];
+                 } else if (p.charAt(j - 1) == '*') {
+                     dp[i][j] = dp[i][j - 1] || dp[i - 1][j];
+                 }
+             }
+         }
+         return dp[s.length()][p.length()];
+     }
+
+
+
 
     /**
      * 从左至右裁剪字符串法。
@@ -83,36 +113,42 @@ public class WildcardMatchMaster {
         // 从左到右匹配s，匹配成功就将s成功 的部分删除掉
         int ls = 0; //记录p匹配到哪里了
         for (int pi = 0; pi < pc.length; pi++) {
-            //先比较p 剩余的部分与s是不是一样的，一样的就没必要继续了
+            //先比较p 剩余的部分与s是不是一样的，一样的就说明也是匹配成功
             if (s.equals(p.substring(ls))){
                 return true;
             }
-
+            //p当前的字符
             char pCur = pc[pi];
             if(s.length()==0 && pCur == '*'){
                 ls = pi+1;
                 continue;
             }
             if (pCur != '?' && pCur != '*'){
+                if (s.indexOf(pCur)==-1){
+                    //如果s都不包括了pcur，那么肯定也是匹配不成功的
+                    return false;
+                }
                 continue;
             }
+
             //有匹配符 * 或者 ？ ,那么截取p中匹配符前面的字符串，看下s还有没有
-            String psub = p.substring(ls, pi);
+            String psub = p.substring(ls, pi);//通配符前面的字符串
             //此时psub 必定是 s的开头
             int indexOfs = s.indexOf(psub);
             if (indexOfs!=0){
                 return false;
             }
+            //此时
+            s = s.substring(psub.length());
 
-            //如果是? ，往后面1位
-            int offset ;
+            int offset = 0 ; //s需要截取的字符串长度1
+            //如果是? ，psub基础上再往后1位
             if (pCur == '?'){
+                //*的下一个如果是? ，直接往后一位就是了
                 offset = 1;
             }else{
-                //* 的处理
-                offset = 0; //默认0,即*是结尾了
-                //找到 * 的下一个字符
-                char _pc;
+                //* 的处理，需要找到*的下一个字符，然后定位s该字符的位置
+                char _pc = '*';// * 的下一个字符
                 while(pi<pc.length){
                     if (pc[pi] != '*'){
                         _pc = pc[pi];
@@ -120,27 +156,50 @@ public class WildcardMatchMaster {
                     }
                     pi++;
                 }
-
+                if (_pc == '*'){
+                    //p 只剩 *了，也就匹配成功了
+                    return true;
+                }
+                if (_pc == '?'){
+                    offset = 1;
+                    //找到? 下一个不为
+                }else{
+                    //pi剩余部分是否还有 * ,如果还有，那么就是需要从s的左边开找，如果没有， 那么就是需要从右边开找
+                    String _pr = p.substring(pi);
+                    offset = _pr.indexOf("*")==-1?s.lastIndexOf(_pc):s.indexOf(_pc);
+                    if (offset==-1){
+                        //s已经没有该字符串了，那么也就匹配不成功
+                        return false;
+                    }
+                }
+                pi--;
             }
-            int sIndex2cut = psub.length()+offset;
-            if (psub.length()>=s.length()){
-                //需要cut的部分比s还长，那么匹配失败
-                return false;
+            if (offset>s.length()){
+                //需要cut的部分比s还长，那么匹配失败,再看p剩下的是不是全是*，如果是也就成功，否则失败
+                String pl = p.substring(pi+1);
+                char[] _plc = pl.toCharArray();
+                if(_plc.length==0){
+                    return false;
+                }
+                for (int i = 0; i < _plc.length; i++) {
+                    if (_plc[i] != '*')  {
+                        return false;
+                    }
+                }
+                return true;
             }
             //现在将s给剪切,p只是记录到哪里了
-            s = s.substring(sIndex2cut); //s的剩余部分
+            s = s.substring(offset); //s的剩余部分
             ls = pi+1; //记录p剪切到哪里了
         }
-        return s.length()==0;
+        return s.length()==0 ;
     }
-    private static String tryCut(String s ,String sub,int offset){
-        int indexOfs = s.indexOf(sub);
-        int tocut = sub.length()+offset;
-        if (indexOfs==0 && tocut<=s.length()){
-            return s.substring(tocut);
+
+    private static void assertMatch(String s,String p,boolean flag){
+        WildcardMatchMaster master = new WildcardMatchMaster();
+        boolean match = master.isMatch3(s, p);
+        if (match ^ flag){
+            System.out.println(s+","+p+"\t->should be "+flag+",but "+match);
         }
-        return "-1";
     }
-
-
 }
