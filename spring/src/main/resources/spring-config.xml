@@ -11,4 +11,12 @@
     <context:component-scan base-package="com.abreaking"></context:component-scan>
     <context:annotation-config/>
 
+    <bean id="po1" class="com.abreaking.master.spring.prototype.PrototypeObject" scope="prototype">
+        <property name="name" value="zhangsan"></property>
+    </bean>
+
+    <bean id="po2" class="com.abreaking.master.spring.prototype.PrototypeObject" >
+        <property name="name" value="lisi"></property>
+    </bean>
+
 </beans>

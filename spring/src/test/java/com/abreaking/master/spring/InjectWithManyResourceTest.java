@@ -2,6 +2,7 @@ package com.abreaking.master.spring;
 
 import com.abreaking.master.spring.component.RecycleDIFirst;
 import com.abreaking.master.spring.component.UserService;
+import com.abreaking.master.spring.prototype.PrototypeMaster;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,20 +25,18 @@ public class InjectWithManyResourceTest{
      * 存在多个实现类的compoenent时：
      * org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'com.abreaking.master.spring.InjectWithManyResouce': Injection of resource dependencies failed; nested exception is org.springframework.beans.factory.NoUniqueBeanDefinitionException: No qualifying bean of type 'com.abreaking.master.spring.component.UserService' available: expected single matching bean but found 2: userServiceFirst,userServiceSecond
      */
-    @Autowired
-    UserService autoUserService;
 
     @Resource
-    UserService resourceUserService;
-
-    @Resource(name = "userServiceSecond")
-    UserService userServiceSecond;
+    PrototypeMaster prototypeMaster;
 
     @Test
-    public void test01(){
-        autoUserService.print();
-        resourceUserService.print();
-        userServiceSecond.print();
+    public void test02() throws InterruptedException {
+        for (int i = 0; i < 5; i++) {
+            new Thread(()->prototypeMaster.say()).start();
+        }
+        Thread.currentThread().join();
     }
+
+
 
 }
