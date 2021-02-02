@@ -134,7 +134,7 @@ public class SkipListMaster {
         }
 
         /**
-         * 找到level层 value 大于node 的节点
+         * 找到level层 value 刚好不小于node 的节点
          * @param node
          * @param levelIndex
          * @param value
