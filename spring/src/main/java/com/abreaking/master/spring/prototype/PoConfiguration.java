@@ -12,9 +12,21 @@ import org.springframework.context.annotation.Scope;
 @Configuration
 public class PoConfiguration {
 
-    @Bean("")
-    @Scope("scope")
-    public void bean(){
+    /**
+     * A B 都依赖poBean，都会是同一个对象的
+     */
+    @Bean
+    public MyServiceA beanA(){
+        return new MyServiceA(poBean());
+    }
+    @Bean
+    public MyServiceB beanB(){
+        return new MyServiceB(poBean());
+    }
 
+
+    @Bean
+    public PrototypeObject poBean(){
+        return new PrototypeObject();
     }
 }
