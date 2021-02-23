@@ -17,16 +17,32 @@ public class PoConfiguration {
      */
     @Bean
     public MyServiceA beanA(){
-        return new MyServiceA(poBean());
-    }
-    @Bean
-    public MyServiceB beanB(){
-        return new MyServiceB(poBean());
+        MyServiceA myServiceA = new MyServiceA(null);
+        System.out.println("myServiceA"+myServiceA);
+        return myServiceA;
     }
 
-
+    /**
+     * 它会自动注入poBean的
+     * @param poBean
+     * @return
+     */
     @Bean
-    public PrototypeObject poBean(){
-        return new PrototypeObject();
+    public MyServiceB beanB(PrototypeObject poBean){
+        MyServiceB myServiceB = new MyServiceB(poBean);
+        System.out.println(",B->"+myServiceB+",po->"+poBean);
+        return myServiceB;
+    }
+
+    /**
+     * 会自动注入myServiceA
+     * @param myServiceA
+     * @return
+     */
+    @Bean
+    public PrototypeObject poBean(MyServiceA myServiceA){
+        PrototypeObject poBean = new PrototypeObject();
+        System.out.println("A->"+myServiceA+",po->"+poBean);
+        return poBean;
     }
 }
