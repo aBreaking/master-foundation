@@ -1,0 +1,59 @@
+-- 197. 上升的温度
+-- SQL架构
+-- 表 Weather
+--
+-- +---------------+---------+
+-- | Column Name   | Type    |
+-- +---------------+---------+
+-- | id            | int     |
+-- | recordDate    | date    |
+-- | temperature   | int     |
+-- +---------------+---------+
+-- id 是这个表的主键
+-- 该表包含特定日期的温度信息
+--
+--
+-- 编写一个 SQL 查询，来查找与之前（昨天的）日期相比温度更高的所有日期的 id 。
+--
+-- 返回结果 不要求顺序 。
+--
+-- 查询结果格式如下例：
+--
+-- Weather
+-- +----+------------+-------------+
+-- | id | recordDate | Temperature |
+-- +----+------------+-------------+
+-- | 1  | 2015-01-01 | 10          |
+-- | 2  | 2015-01-02 | 25          |
+-- | 3  | 2015-01-03 | 20          |
+-- | 4  | 2015-01-04 | 30          |
+-- +----+------------+-------------+
+--
+-- Result table:
+-- +----+
+-- | id |
+-- +----+
+-- | 2  |
+-- | 4  |
+-- +----+
+-- 2015-01-02 的温度比前一天高（10 -> 25）
+-- 2015-01-04 的温度比前一天高（20 -> 30）
+
+select t1.id from Weather t1 left join Weather t2 on t1.recordDate = date_add(t2.recordDate,interval 1 day)
+where t1.Temperature > t2.Temperature
+
+-- mysql的时间相关的函数：
+
+-- 字符串转时间： date_format('2008-08-08 22:23:01', '%Y%m%d%H%i%s');
+-- 时间转字符串： str_to_date('08.09.2008 08:09:30', '%m.%d.%Y %h:%i:%s')
+-- 日期时间计算函数： date_add(t2.recordDate,interval 1 day)
+----- select date_add(@dt, interval 1 day); -- add 1 day @dt表示时间的那列
+----- select date_add(@dt, interval 1 hour); -- add 1 hour
+----- select date_add(@dt, interval 1 minute); -- ...
+----- select date_add(@dt, interval 1 second);
+----- select date_add(@dt, interval 1 microsecond);
+----- select date_add(@dt, interval 1 week);
+----- select date_add(@dt, interval 1 month);
+----- select date_add(@dt, interval 1 quarter);
+----- select date_add(@dt, interval 1 year);
+----- select date_add(@dt, interval -1 day); -- 减一天
