@@ -41,6 +41,11 @@ public class ImplementTriePrefixTree {
         System.out.println(trie.search("app"));     // 返回 true
     }
 
+    /**
+     * 算法思路：构建一颗数，每个节点保存字符（a-z）
+     * @author liwei
+     * @date 2021/3/22
+     */
     static class Trie {
 
         Node head ;
@@ -58,7 +63,7 @@ public class ImplementTriePrefixTree {
                 Node node = cur.getChildNode(c);
                 if (node==null){
                     node = new Node(c);
-                    cur.list.add(node);
+                    cur.insertChildNode(node);
                 }
                 cur = node;
             }
@@ -93,12 +98,12 @@ public class ImplementTriePrefixTree {
         }
 
         class Node{
-            char value;
-            int word = 0;
-            List<Node> list;
+            char value; //当前节点的值
+            int word = 0; //用于记录单词出现的次数
+            Node[] list; //子节点
 
             public Node() {
-                this.list = new ArrayList();
+                this.list = new Node[26]; //26个字母，每个都有其固定的位置
             }
 
             public Node(char value) {
@@ -107,12 +112,11 @@ public class ImplementTriePrefixTree {
             }
 
             public Node getChildNode(char c){
-                for (Node node : list){
-                    if (node.value == c){
-                        return node;
-                    }
-                }
-                return null;
+                return list[c-'a'];
+            }
+
+            public void insertChildNode(Node node){
+                list[node.value-'a'] = node;
             }
         }
     }
