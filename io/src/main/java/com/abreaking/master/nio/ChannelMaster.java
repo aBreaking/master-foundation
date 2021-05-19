@@ -3,16 +3,13 @@ package com.abreaking.master.nio;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.DoubleBuffer;
 import java.nio.channels.*;
-import java.util.stream.IntStream;
+import java.util.RandomAccess;
 
 /**
  * Java NIO的通道类似流，但又有些不同：
@@ -24,6 +21,15 @@ import java.util.stream.IntStream;
  * @date 2021/5/19
  */
 public class ChannelMaster {
+
+    @Test
+    public void testtransfer() throws IOException {
+        RandomAccessFile from = new RandomAccessFile("D:\\workspace\\master-foundation\\io\\src\\main\\resources\\mbb-target.log", "rw");
+        RandomAccessFile to = new RandomAccessFile("D:\\workspace\\master-foundation\\io\\src\\main\\resources\\mbb-target-new.log", "rw");
+        FileChannel fromChannel = from.getChannel();
+        FileChannel toChannel = to.getChannel();
+        fromChannel.transferTo(0,fromChannel.size(),toChannel);
+    }
 
     /**
      * 使用FileChannel简单的往文件中写数据
@@ -61,7 +67,8 @@ public class ChannelMaster {
             if (socketChannel!=null){
                 ByteBuffer byteBuffer = ByteBuffer.allocate(8);
                 socketChannel.read(byteBuffer);
-                System.out.println(BufferMaster.flipToString(byteBuffer));
+                byteBuffer.flip();
+                System.out.println(new String(byteBuffer.array()));
 
                 byteBuffer.clear();
 

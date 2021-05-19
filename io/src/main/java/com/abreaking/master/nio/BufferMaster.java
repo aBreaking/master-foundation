@@ -33,9 +33,9 @@ public class BufferMaster {
     public void testByteBuffer02(){
         ByteBuffer byteBuffer = ByteBuffer.allocate(32);
         byteBuffer.put("abc".getBytes());
-        for (int i = 0; i < byteBuffer.limit(); i++) {
-            System.out.println((char)byteBuffer.get(i));
-        }
+
+        byteBuffer.flip();
+        System.out.println(new String(byteBuffer.array()));
     }
 
     @Test
@@ -86,15 +86,13 @@ public class BufferMaster {
             byteBuffer.put(split[i].getBytes());
             System.out.println(byteBuffer);
         }
-        System.out.println(flipToString(byteBuffer));
+        byteBuffer.flip();
+        System.out.println(byteBuffer);
+
     }
 
     static String flipToString(ByteBuffer byteBuffer){
         byteBuffer.flip();
-        char[] chars = new char[byteBuffer.limit()];
-        for (int i = 0; byteBuffer.hasRemaining(); i++) {
-            chars[i] = (char) byteBuffer.get();
-        }
-        return new String(chars);
+        return new String(byteBuffer.array());
     }
 }
