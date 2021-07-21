@@ -37,7 +37,7 @@ public class JucConditionReporterMaster {
             public void run() {
                 report(n.getAndIncrement(),lock,condition);
             }
-        },0,1000);
+        },0,200);
 
 
 
@@ -48,7 +48,7 @@ public class JucConditionReporterMaster {
     static void report(int i,Lock lock,Condition condition){
         lock.lock();
         try{
-            if (Math.random()<0.6) { //随机决定是成功还是失败
+            if (Math.random()<0.2) { //随机决定是成功还是失败
                 System.out.println("success ->"+i +"->"+new SimpleDateFormat("ss").format(new Date()));
             }else{
                 System.out.println("error ->" + i);
@@ -86,10 +86,14 @@ public class JucConditionReporterMaster {
                         condition.await();
                         System.out.println("handler wake up");
                     }
-                    Integer poll = failedQueue.poll();
-                    System.out.println("hand -> "+poll);
-                    report(poll,lock,condition);
-                    Thread.sleep(1000);
+                    Object[] objects = failedQueue.toArray();
+                    for (int i = 0; i < objects.length; i++) {
+                        Integer poll = failedQueue.poll();
+                        System.out.println("hand -> "+poll);
+                        report(poll,lock,condition);
+                    }
+
+                    Thread.sleep(200);
                 }catch (Exception e){
                     e.printStackTrace();
                 }finally {

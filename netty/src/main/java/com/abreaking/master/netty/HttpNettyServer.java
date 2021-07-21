@@ -33,12 +33,11 @@ public class HttpNettyServer {
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel channel) throws Exception {
-                        System.out.println("init channel:"+channel);
                         channel.pipeline()
                                 .addLast("decoder",new HttpRequestDecoder())
                                 .addLast("encoder", new HttpResponseEncoder())  // 2
                                 .addLast("aggregator", new HttpObjectAggregator(512 * 1024))    // 3
-                                .addLast("handler", new HttpNettyHandler());
+                                .addLast("handler", new XsgDemoHandler());
                     }
                 })
                 .option(ChannelOption.SO_BACKLOG, 128) // determining the number of connections queued

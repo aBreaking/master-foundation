@@ -1,9 +1,7 @@
 package master.abreaking.jedis;
 
 import org.junit.Test;
-import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.JedisCluster;
-import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.*;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -27,6 +25,24 @@ public class JedisClusterMaster {
             String[] s = addr.split(":");
             clusterNodes.add(new HostAndPort(s[0],Integer.parseInt(s[1])));
         }
+    }
+
+    @Test
+    public void deleteBatch() throws InterruptedException {
+        JedisCluster redis = getJedisCluster();
+
+        for (int i = 0; i < 10; i++) {
+            redis.set("a"+i,String.valueOf(System.currentTimeMillis()));
+        }
+
+        Thread.sleep(3000);
+        String[] keys = new String[10];
+        for (int i = 0; i < 10; i++) {
+            keys[i]  = "a"+i;
+        }
+        String lua = "for i=0,9 do redis.call('del', KEYS[i]) end";
+        redis.eval(lua,10,keys);
+
     }
 
     @Test
@@ -79,8 +95,13 @@ public class JedisClusterMaster {
         Thread.sleep(10000);
     }
 
-    private static JedisCluster getJedisCluster(){
+    public static JedisCluster getJedisCluster(){
+
         JedisCluster cluster = new JedisCluster(clusterNodes, 3000, 3000, 1000, redis_p, new JedisPoolConfig());
         return cluster;
+    }
+
+    public void test01(){
+
     }
 }

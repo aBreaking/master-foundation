@@ -26,8 +26,21 @@ public class DynamicThreadPoolMaster {
 
 
     public static void main(String args[]) throws InterruptedException {
-        newThreadForUpdateThreadPool();
-        for (int i = 0; i < 50; i++) {
+        //newThreadForUpdateThreadPool();
+        for (int i = 0; i < 3; i++) {  // 3=corePoolSize
+            THREAD_POOL.submit(new MyRunnable(1));
+        }
+        for (int i = 0; i < 10; i++) { //10 = LinkedBlockingDeque.size()
+            THREAD_POOL.submit(new MyRunnable(1));
+        }
+        for (int i = 0; i < 2; i++) { //2+3 = 5 = maximumPoolSize
+
+        }
+        THREAD_POOL.submit(new MyRunnable(1));
+        THREAD_POOL.submit(new MyRunnable(1));
+
+        Thread.sleep(2000);
+        for (int i = 0; i < 1; i++) {
             THREAD_POOL.submit(new MyRunnable());
         }
         System.out.println("thread pool over");
@@ -53,14 +66,25 @@ public class DynamicThreadPoolMaster {
 
 
     private static class MyRunnable implements Runnable{
+
+        int ts;
+
+        public MyRunnable(int ts) {
+            this.ts = ts;
+        }
+
+        public MyRunnable() {
+            this.ts = 300;
+        }
+
         @Override
         public void run() {
-            System.out.println(Thread.currentThread().getName()+" is running,activeSize :"+THREAD_POOL.getActiveCount()+",CompletedTaskCount:"+THREAD_POOL.getCompletedTaskCount());
             try {
-                Thread.sleep(3000);
+                Thread.sleep(ts*1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            System.out.println(Thread.currentThread().getName()+" is running,activeSize :"+THREAD_POOL.getActiveCount()+",CompletedTaskCount:"+THREAD_POOL.getCompletedTaskCount());
         }
     }
 }

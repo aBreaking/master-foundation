@@ -1,7 +1,4 @@
 package master.abreaking.jedis;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPoolConfig;
@@ -16,12 +13,10 @@ import java.util.Set;
  * @author liwei_paas
  * @date 2020/7/30
  */
-@Configuration
 public class RedisClusterConfig {
     final static String redis_ip_port = "127.0.0.1:7001,127.0.0.1:7002,127.0.0.1:7003,127.0.0.1:7004,127.0.0.1:7005,127.0.0.1:7006";
     final static String redis_p = "5172551";
 
-    @Bean
     public JedisCluster getJedisCluster(){
         Set<HostAndPort> clusterNodes = new HashSet<HostAndPort>();
         List<String> addresses = Arrays.asList(redis_ip_port.split(","));

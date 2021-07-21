@@ -1,5 +1,7 @@
 package com.abreaking.master.lang;
 
+import org.junit.jupiter.api.Test;
+
 /**
  * 字符串的几中比较
  * @author liwei
@@ -22,6 +24,19 @@ public class StringMaster {
         System.out.println(s0==s6); //true
         System.out.println(s0.equals(s4)); //true
         System.out.println(s0.equals(s5)); //true
+
+    }
+
+
+    @Test
+    public void testPoolInt(){
+        Integer  a = 127;
+        Integer  b = 127;
+        System.out.println(a==b); //true
+
+        Integer c = 128;
+        Integer d = 128;
+        System.out.println(c==d); //false
 
     }
 

@@ -2,6 +2,9 @@ package com.abreaking.master.spring;
 
 import com.abreaking.master.spring.component.RecycleDIFirst;
 import com.abreaking.master.spring.component.UserService;
+import com.abreaking.master.spring.prototype.MyServiceA;
+import com.abreaking.master.spring.prototype.MyServiceB;
+import com.abreaking.master.spring.prototype.PoConfiguration;
 import com.abreaking.master.spring.prototype.PrototypeMaster;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,10 +34,27 @@ public class InjectWithManyResourceTest{
 
     @Test
     public void test02() throws InterruptedException {
+
+
         for (int i = 0; i < 5; i++) {
             new Thread(()->prototypeMaster.say()).start();
         }
         Thread.currentThread().join();
+    }
+
+    @Resource
+    MyServiceA myServiceA;
+
+    @Resource
+    MyServiceB myServiceB;
+
+    @Resource
+    PoConfiguration poConfiguration;
+
+    @Test
+    public void test03(){
+        System.out.println(myServiceA.po == myServiceB.po);
+        System.out.println(poConfiguration);
     }
 
 

@@ -2,8 +2,6 @@ package master.abreaking.jedis;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import redis.clients.jedis.JedisCluster;
 
 import javax.annotation.Resource;
@@ -13,8 +11,8 @@ import javax.annotation.Resource;
  * @author liwei_paas
  * @date 2020/7/30
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:spring-config.xml")
+/*@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath:spring-config.xml")*/
 public class SpringRedisMaster {
 
     @Resource

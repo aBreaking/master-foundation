@@ -25,19 +25,19 @@ public class MyBeanPostProcessor implements BeanPostProcessor {
     //bean实例化之前进行定义的逻辑处理:针对不同接口进行不同处理
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        System.out.println(beanName+" begin init");
+        //System.out.println(beanName+" begin init");
         if (bean instanceof Runnable){
             ((Runnable)bean).run();
         }
         if (bean instanceof Serializable){
-            System.out.println(beanName + " can be serialized");
+          //  System.out.println(beanName + " can be serialized");
         }
         return bean;
     }
     //bean实例化之后的逻辑处理
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        System.out.println(beanName+" init complete");
+        //System.out.println(beanName+" init complete");
         return bean;
     }
 
