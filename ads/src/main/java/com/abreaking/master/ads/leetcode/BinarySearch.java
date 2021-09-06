@@ -41,7 +41,8 @@ public class BinarySearch {
         }
 
         public int search(int[] nums, int target,int start ,int end) {
-            int m = (start+end)/2;
+            //int m = (start+end)/2; //这里
+            int m = start + (end-start)/2; //这里用这种方式替换上面，是为了防止start+end 溢出
             if (nums[m] == target){
                 return m;
             }
@@ -61,7 +62,8 @@ public class BinarySearch {
             int l = 0;
             int r = nums.length-1;
             while (l<=r){
-                int mid = (r+l)/2;
+                //int mid = (r+l)/2;
+                int mid = l + (r-l)/2; //这里用这种方式替换上面，是为了防止r+l溢出
                 int m = nums[mid];
                 if (m == target){
                     return mid;
