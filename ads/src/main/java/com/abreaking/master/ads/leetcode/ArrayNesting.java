@@ -45,7 +45,7 @@ public class ArrayNesting {
         public int arrayNesting(int[] nums) {
             boolean[] flags = new boolean[nums.length];
 
-            int result = 0;
+            int result = 1;
 
             for (int i = 0; i < nums.length; i++) {
 
@@ -70,9 +70,9 @@ public class ArrayNesting {
     class Solution2 {
         public int arrayNesting(int[] nums) {
 
-            int result = 0;
+            int result = 1;
             for (int i = 0; i < nums.length; i++) {
-                int count = 1;
+                int count = 0;
                 while (i != nums[i]){
                     int _i = nums[i];
                     nums[i] = i;
